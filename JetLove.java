@@ -61,7 +61,7 @@ public class JetLove extends JPanel implements KeyListener {
                                 g.setColor(new Color(100, 100, 255));
                                 g.drawLine(shots.get(i).x, shots.get(i).y, shots.get(i).x + 10, shots.get(i).y);
                             }
-                            shots.get(i).x += 10;
+                            shots.get(i).x += 50;
                             synchronized(this) {
                                 g.setColor(Color.red);
                                 g.drawLine(shots.get(i).x, shots.get(i).y, shots.get(i).x + 10, shots.get(i).y);
@@ -158,6 +158,14 @@ public class JetLove extends JPanel implements KeyListener {
             public void run() {
                 while(true) {
                     for(int i=0; i<bullets.size(); i++) {
+                        
+                        try {
+                            g.setColor(new Color(100, 150, 255));
+                            g.fillRect(bullets.get(i).x, bullets.get(i).y, 50, 50);
+                            
+                            bullets.get(i).x -= 10;
+                        } catch(Exception e) {}
+
                         g.drawImage(img, bullets.get(i).x, bullets.get(i).y, 50, 50, null);
                         for(int k=0; k<100; k++)
                             for(int l=0; l<100; l++)
@@ -170,11 +178,16 @@ public class JetLove extends JPanel implements KeyListener {
                                         bullets.remove(bullets.get(i));
                                     }
                                 } catch(Exception e) {}
+                        
+                        try {
+                            if(bullets.get(i).x < -100)
+                                bullets.remove(bullets.get(i));
+                        } catch(Exception e) {}
                     }
                     if(bullets.size() == 0) {
                         for(int i=0; i<20; i++) {
                             Bullet bullet = new Bullet();
-                            bullet.x = rand.nextInt(1150);
+                            bullet.x = 1200 + rand.nextInt(1150);
                             bullet.y = rand.nextInt(550);
                             bullets.add(bullet);
                         }
@@ -229,7 +242,7 @@ public class JetLove extends JPanel implements KeyListener {
                 g.fillRect(hero.x, hero.y, 100, 100);
             }
             if(hero.y > 0)
-                hero.y -= 2;
+                hero.y -= 12;
         }
         else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
             synchronized(this) {
@@ -237,7 +250,7 @@ public class JetLove extends JPanel implements KeyListener {
                 g.fillRect(hero.x, hero.y, 100, 100);
             }
             if(hero.y < 501)
-                hero.y += 2;
+                hero.y += 12;
         }
         else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
             synchronized(this) {
@@ -245,7 +258,7 @@ public class JetLove extends JPanel implements KeyListener {
                 g.fillRect(hero.x, hero.y, 100, 100);
             }
             if(hero.x > 0)
-                hero.x -= 2;
+                hero.x -= 12;
         }
         else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
             synchronized(this) {
@@ -253,7 +266,7 @@ public class JetLove extends JPanel implements KeyListener {
                 g.fillRect(hero.x, hero.y, 100, 100);
             }
             if(hero.x < 1200)
-                hero.x += 2;
+                hero.x += 12;
         }
         else if(e.getKeyCode() == KeyEvent.VK_PERIOD) {
             if(bulletsCount > 0) {
@@ -323,7 +336,7 @@ public class JetLove extends JPanel implements KeyListener {
         
         pp.setLayout(null);
         
-        pp.setBackground(Color.yellow);
+        pp.setBackground(Color.black);
 
         pp.setBounds(j.getBounds());
 
@@ -424,8 +437,6 @@ public class JetLove extends JPanel implements KeyListener {
             @Override
             public void run() {
                 while(true) {
-//                    if(hero.life == 0)
-//                        System.exit(0);
                     if(jets.size() == 0) {
                         for(int i=0; i<10; i++) {
                             Jet cloud = new Jet();
@@ -440,7 +451,9 @@ public class JetLove extends JPanel implements KeyListener {
                             g.fillRect(jets.get(i).x, jets.get(i).y, 100, 100);
                         }
 
-                        jets.get(i).x -= 10;
+                        try {
+                            jets.get(i).x -= 30;
+                        } catch(Exception e) {}
                     }
                     for(int i=0; i<jets.size(); i++) {
                         g.drawImage(img, jets.get(i).x, jets.get(i).y, 100, 100, null);
@@ -464,11 +477,7 @@ public class JetLove extends JPanel implements KeyListener {
 
                                         j.setTitle("crash: " + hero.crash + ", kills: " + hero.kills);
                                     }
-                                } catch(Exception e) 
-                                {
-                                    //e.printStackTrace();
-                                }
-
+                                } catch(Exception e) {}
                         try {
                             if(jets.get(i).x < -100) {
                                 jets.remove(jets.get(i));
